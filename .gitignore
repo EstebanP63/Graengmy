@@ -4,6 +4,7 @@ server/node_modules/
 
 # Env files
 server/.env
+server/.env.keys
 
 # Build output
 client/dist/
