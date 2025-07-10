@@ -34,7 +34,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('token') // Or use Vuex/Pinia
+  const isAuthenticated = localStorage.getItem('token') || sessionStorage.getItem('token') // Or use Vuex/Pinia
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else {

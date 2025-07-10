@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import { onMounted} from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAuthRedirect } from '../composables/useAuthRedirect.js'
@@ -25,8 +24,8 @@ const submit = async () => {
         password: form.value.password
       })
     })
-
     const data = await res.json()
+
     if (!res.ok) throw new Error(data.error || 'Login failed')
 
     if(form.value.remember) {
