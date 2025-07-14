@@ -1,7 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { jwtDecode } from 'jwt-decode'
+import type { DecodedToken } from '../types/auth.ts'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import AdminDashboard from '@/views/AdminDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +26,12 @@ const router = createRouter({
       component: Register
     },
     {
+      path: '/admin',
+      name: 'adminDashboard',
+      component: AdminDashboard,
+      meta: { requiresAuth: true, requiresRole: 'admin' }
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
@@ -34,12 +43,23 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('token') || sessionStorage.getItem('token') // Or use Vuex/Pinia
-  if (to.meta.requiresAuth && !isAuthenticated) {
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token') // Or use Vuex/Pinia
+  if (to.meta.requiresAuth && !token) {
     next('/login')
-  } else {
-    next()
   }
+  if (to.meta.requiresRole && token) {
+    try {
+      const decoded = jwtDecode<DecodedToken>(token)
+      
+      if (decoded.role !== to.meta.requiresRole) {
+        return next('/')
+      }
+    } catch (err) {
+      return next('/login')
+    }
+  }
+
+  next()
 })
 
 export default router

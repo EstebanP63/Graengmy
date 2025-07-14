@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 
-
 const contentBlockSchema = new mongoose.Schema({
   type: { type: String, required: true }, //  'text', 'table', 'question', etc.
   order: { type: Number, required: true },
