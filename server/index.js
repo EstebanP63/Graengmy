@@ -8,6 +8,7 @@ const app = express()
 const User = require('./models/User');
 const Lesson = require('./models/Lesson');
 const authRoutes = require('./routes/auth');
+const lessonRoutes = require('./routes/lessons');
 
 app.use(express.json())
 app.use(cors({origin: process.env.FRONTEND_URL, credentials: true}))
@@ -17,6 +18,7 @@ mongoose.connect(process.env.MONGO_URL)
 .catch(err => console.error('❌ Connection error:', err))
 
 app.use('/', authRoutes)
+app.use('/api', lessonRoutes)
 
 const PORT = process.env.PORT || 5000
 
