@@ -19,7 +19,7 @@ const contentBlockSchema = new mongoose.Schema({
 }, { _id: false })
 
 const lessonSchema = new mongoose.Schema({
-  title:       { type: String, required: true },
+  name:       { type: String, required: true },
   description: { type: String, required: true},
   contentBlocks: [contentBlockSchema],
   order: Number,

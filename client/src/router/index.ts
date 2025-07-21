@@ -4,7 +4,8 @@ import type { DecodedToken } from '../types/auth.ts'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import AdminDashboard from '@/views/AdminDashboard.vue'
+import AdminDashboard from '../views/AdminDashboard.vue'
+import CreateLesson from '../views/CreateLesson.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,12 @@ const router = createRouter({
       path: '/admin',
       name: 'adminDashboard',
       component: AdminDashboard,
+      meta: { requiresAuth: true, requiresRole: 'admin' }
+    },
+    {
+      path: '/createLesson',
+      name: 'createLesson',
+      component: CreateLesson,
       meta: { requiresAuth: true, requiresRole: 'admin' }
     },
     {

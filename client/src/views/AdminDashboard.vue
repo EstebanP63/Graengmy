@@ -18,6 +18,22 @@ onMounted(async () => {
 })
 </script>
 
+<template>
+  <div>
+    <h1>Lecciones</h1>
+    <div v-if="loading" class="loading">Cargando lecciones...</div>
+    <div v-if="!loading && lessons.length < 1">
+        <div>No se encontraron lecciones</div>
+        <RouterLink to="/createLesson">Añadir Lección</RouterLink>
+    </div>
+    <ul v-else>
+      <li v-for="lesson in lessons" :key="lesson._id">
+        {{ lesson.title }} — {{ lesson.description }}
+      </li>
+    </ul>
+  </div>
+</template>
+
 <style>
 .loading {
   animation: pulse 1s infinite;
@@ -30,20 +46,3 @@ onMounted(async () => {
   100% { opacity: 0.5; }
 }
 </style>
-
-<template>
-  <div>
-    <h1>Lecciones</h1>
-    <div v-if="loading" class="loading">Cargando lecciones...</div>
-    <div v-if="!loading && lessons.length < 1">
-        <div>No se encontraron lecciones</div>
-    </div>
-    <ul v-else>
-      <li v-for="lesson in lessons" :key="lesson._id">
-        {{ lesson.title }} — {{ lesson.description }}
-      </li>
-    </ul>
-  </div>
-</template>
-
-
