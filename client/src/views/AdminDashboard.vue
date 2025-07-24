@@ -28,7 +28,7 @@ onMounted(async () => {
     </div>
     <ul v-else>
       <li v-for="lesson in lessons" :key="lesson._id">
-        {{ lesson.title }} — {{ lesson.description }}
+        {{ lesson.name }} — {{ lesson.description }} - {{ lesson.contentBlocks }}
       </li>
     </ul>
   </div>

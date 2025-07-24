@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { jwtDecode } from 'jwt-decode'
+import DynamicTable from '../components/DynamicTableEditor.vue'
 
 const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 const decoded = jwtDecode(token)
@@ -15,7 +16,7 @@ const form = ref({
 const addContentBlock = () => {
     form.value.contentBlocks.push({
         type: '',
-        data: {}
+        payload: {}
     });
 }
 
@@ -26,6 +27,37 @@ const removeContentBlock = (index) => {
 const hasTitleBlock = computed(() =>
     form.value.contentBlocks.some(block => block.type === 'title')
 )
+
+const verForm = () => {
+    console.log(form.value);
+}
+const prepareLessonPayload = ()  => {
+    const orderedBlocks = form.value.contentBlocks.map((block, index) => ({
+    type: block.type,
+    payload: block.payload, // already refactored from 'data'
+    order: index + 1
+  }));
+  return {
+    ...form.value,
+        contentBlocks: orderedBlocks
+  }
+}
+const submitLesson = async () => {
+    const lessonData = prepareLessonPayload()
+  try {
+    const res = await fetch('http://localhost:5000/api/lessons', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(lessonData)
+    });
+
+    const result = await res.json();
+    console.log('Lesson created:', result);
+  } catch (err) {
+    console.error('Error creating lesson:', err);
+  }
+};
+
 </script>
 
 <template>
@@ -48,26 +80,24 @@ const hasTitleBlock = computed(() =>
             
             <div v-if="block.type === 'title'">
                 <label for="title">Título</label>
-                <input id="title" type="text" placeholder="El verbo To Be" v-model="block.data.title">
+                <input id="title" type="text" placeholder="El verbo To Be" v-model="block.payload.title">
             </div>
             <div v-if="block.type === 'text'">
-                <label>Texto <textarea name="text" type="text" placeholder="Es uno de los verbos mas utilizados en el ingles, significando tanto Ser como Estar" v-model="block.data.text"></textarea></label>             
+                <label>Texto <textarea name="text" type="text" placeholder="Es uno de los verbos mas utilizados en el ingles, significando tanto Ser como Estar" v-model="block.payload.text"></textarea></label>             
             </div>
-            <div v-if="block.type === 'table'">
 
+            <DynamicTable v-if="block.type === 'table'" :modelValue="block.payload.table" @update:modelValue="block.payload.table = $event"/>
 
-            <!--oof, gotta think of a way to let the user input a table without
-            giving then a flat text input and expecting them to write json-->
-
-
-            </div>
             <div v-if="block.type === 'question'">
-                <label>Pregunta <input name="question" v-model="block.data.question" placeholder="Where _ Waldo" /></label>
-                <label>Respuesta <input name="answer" v-model="block.data.answer" placeholder="is" /></label>
+                <label>Pregunta <input name="question" v-model="block.payload.question" placeholder="Where _ Waldo" /></label>
+                <label>Respuesta <input name="answer" v-model="block.payload.answer" placeholder="is" /></label>
             </div>
             <button type="button" @click="removeContentBlock(index)">Eliminar bloque de contenido</button>
         </div>
+        <button @click.prevent="submitLesson">Crear lección</button>
     </form>
+
+    <button type="button" @click="verForm">verForm</button>
     <RouterLink to="/admin">Volver</RouterLink>
 </template>
 
