@@ -28,13 +28,10 @@ const hasTitleBlock = computed(() =>
     form.value.contentBlocks.some(block => block.type === 'title')
 )
 
-const verForm = () => {
-    console.log(form.value);
-}
 const prepareLessonPayload = ()  => {
     const orderedBlocks = form.value.contentBlocks.map((block, index) => ({
     type: block.type,
-    payload: block.payload, // already refactored from 'data'
+    payload: block.payload,
     order: index + 1
   }));
   return {
@@ -45,7 +42,7 @@ const prepareLessonPayload = ()  => {
 const submitLesson = async () => {
     const lessonData = prepareLessonPayload()
   try {
-    const res = await fetch('http://localhost:5000/api/lessons', {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/lessons`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(lessonData)
@@ -97,7 +94,6 @@ const submitLesson = async () => {
         <button @click.prevent="submitLesson">Crear lección</button>
     </form>
 
-    <button type="button" @click="verForm">verForm</button>
     <RouterLink to="/admin">Volver</RouterLink>
 </template>
 

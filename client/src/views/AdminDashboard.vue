@@ -7,7 +7,7 @@ const loading = ref(true)
 
 onMounted(async () => {
     try{
-        const response = await fetch('http://localhost:5000/api/lessons')
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/lessons`)
         const data = await response.json()
         lessons.value = data
     } catch (error) {
@@ -22,15 +22,16 @@ onMounted(async () => {
   <div>
     <h1>Lecciones</h1>
     <div v-if="loading" class="loading">Cargando lecciones...</div>
-    <div v-if="!loading && lessons.length < 1">
-        <div>No se encontraron lecciones</div>
-        <RouterLink to="/createLesson">Añadir Lección</RouterLink>
-    </div>
-    <ul v-else>
-      <li v-for="lesson in lessons" :key="lesson._id">
-        {{ lesson.name }} — {{ lesson.description }} - {{ lesson.contentBlocks }}
-      </li>
-    </ul>
+    <div v-else>
+      <div v-if="!loading && lessons.length < 1">No se encontraron lecciones</div>
+      <ul v-else>
+        <li v-for="lesson in lessons" :key="lesson._id">
+          {{ lesson.name }} — {{ lesson.description }} - {{ lesson.contentBlocks }}
+        </li>
+      </ul>
+      <RouterLink to="/createLesson">Añadir Lección</RouterLink>
+      <RouterLink to="/">Volver</RouterLink>
+    </div> 
   </div>
 </template>
 

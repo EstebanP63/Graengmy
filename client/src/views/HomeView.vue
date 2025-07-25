@@ -3,9 +3,6 @@ import { jwtDecode } from 'jwt-decode'
 import { ref } from 'vue'
 import type { DecodedToken } from '../types/auth.ts'
 
-
-import TheWelcome from '../components/TheWelcome.vue'
-
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -27,7 +24,6 @@ if (token) {
 
 <template>
   <main>
-    <TheWelcome />
     <div>
     <h1>Bienvenido a tu panel</h1>
     <button @click="logout">Cerrar sesión</button>
