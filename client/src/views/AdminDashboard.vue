@@ -1,6 +1,7 @@
 <script setup>
-
 import { ref, onMounted } from 'vue'
+
+import LessonsRenderer from '../components/LessonsRenderer.vue'
 
 const lessons = ref ([])
 const loading = ref(true)
@@ -25,9 +26,15 @@ onMounted(async () => {
     <div v-else>
       <div v-if="!loading && lessons.length < 1">No se encontraron lecciones</div>
       <ul v-else>
+        <LessonsRenderer
+          :lessons="lessons"
+          viewMode="admin"
+        />
+        <!--
         <li v-for="lesson in lessons" :key="lesson._id">
           {{ lesson.name }} — {{ lesson.description }} - {{ lesson.contentBlocks }}
         </li>
+        -->
       </ul>
       <RouterLink to="/createLesson">Añadir Lección</RouterLink>
       <RouterLink to="/">Volver</RouterLink>

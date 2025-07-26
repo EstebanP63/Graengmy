@@ -1,6 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { jwtDecode } from 'jwt-decode'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
 import DynamicTable from '../components/DynamicTableEditor.vue'
 
 const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -50,6 +54,7 @@ const submitLesson = async () => {
 
     const result = await res.json();
     console.log('Lesson created:', result);
+    router.push('/admin')
   } catch (err) {
     console.error('Error creating lesson:', err);
   }
